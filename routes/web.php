@@ -16,3 +16,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/test/{id}',function($id){
+    header('Content-Type: application/json');
+    if($id == 1){
+        return json_encode('[{
+            id: 1,
+            question: "Сколько лет создателю?",
+            answer: "",
+        }, {
+            id: 3,
+            question: "Его любимый язык программирования?",
+            answer: "",
+        }]');
+    }
+});

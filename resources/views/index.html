@@ -14,15 +14,39 @@
 
     <section>
         <div class="container" id="app">
-            <div v-for="t in test" class="my-4">
+            <div v-for="t in oTest" class="my-4" v-on:change="Save()">
                 <div class="card">
                     <div class="card-body">
+
                         <h5 class="card-title">{{t.question}}</h5>
                         <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
                         <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
-                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" v-model="t.answer" v-on:change="Save()"> {{t.answer}}
+                        <div v-if="t.radio">
+                            <div class="form-check" v-for="r in t.radio">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" v-bind:value="r" v-model="t.answer">
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                  {{r}}
+                                </label>
+                            </div>
+                        </div>
+                        <div v-else-if="t.chekeds">
+                            <div v-for="c in t.chekeds">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" v-bind:id="c" v-bind:value="c" v-model="t.answer">
+                                    <label class="form-check-label" v-bind:for="c">
+                                  {{c}}
+                                </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" v-model="t.answer">
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div>
+                <button class="btn btn-primary" v-on:click="ClearForm">Очистить форму</button>
             </div>
         </div>
     </section>
@@ -40,40 +64,72 @@
         let app = new Vue({
             el: "#app",
             data: {
-                test: null,
+                oTest: null,
             },
             methods: {
                 Save: function() {
-                    localStorage.setItem("save", this.test);
+                    localStorage.setItem("save", JSON.stringify(this.oTest));
                 },
                 loadSave: function() {
-                    var localData = localStorage.getItem("save");
+                    var localData = JSON.parse(localStorage.getItem("save"));
                     if (localData != null) {
-                        console.log(localData)
-                        this.test = localData;
+                        this.oTest = localData;
                         return true;
                     } else {
                         return false;
                     }
-                }
+                },
+                ClearForm: function() {
+                    this.oTest.forEach(item => {
+                        item.answer = ""
+                    })
+                    localStorage.clear("save")
+                },
+                // SetRadioAnswer: function(id) {
+                //     this.oTest.forEach(item => {
+                //         if (item.id == id) {
+                //             item.answer =
+                //         }
+                //     })
+                // }
             },
             created() {
                 if (this.loadSave()) {
-                    console.log(this.test)
                     console.log("Save is load")
                 } else {
-                    this.test = [{
+                    this.oTest = [{
                         id: 1,
                         question: "Сколько лет создателю?",
-                        answer: "",
+                        answer: null,
                     }, {
-                        id: 3,
+                        id: 4,
                         question: "Его любимый язык программирования?",
-                        answer: "",
+                        radio: ["php", "js", "golang"],
+                        answer: null,
+                    }, {
+                        id: 5,
+                        question: "Где он работал/работает?",
+                        chekeds: ["АО НПФ СИГМА", "ORIJINX"],
+                        answer: [],
                     }]
                     console.log("No save")
                 }
-            }
+            },
+            mounted() {
+                // let xhr = new XMLHttpRequest();
+
+                // xhr.open('GET', '/json.php');
+
+                // xhr.responseType = 'json';
+
+                // xhr.send();
+
+                // // тело ответа {"сообщение": "Привет, мир!"}
+                // xhr.onload = function() {
+                //     let responseObj = xhr.response;
+                //     alert(responseObj.message); // Привет, мир!
+                // };
+            },
         })
     </script>
 </body>
