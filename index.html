@@ -9,14 +9,17 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/style.css" />
   </head>
 
   <body>
     <section>
       <div class="container-fluid" id="app">
         <!-- Position it -->
-        <div class="w-25" style="position: absolute; top: 0; right: 0">
+        <div
+          class="w-25"
+          style="position: absolute; top: 0; right: 0; z-index: 5"
+        >
           <!-- Then put toasts within -->
           <div
             class="toast"
@@ -38,13 +41,16 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="toast-body blink5" v-if="Status">{{Status.text}}</div>
+            <div class="toast-body" v-if="Status" style="font-size: large;">
+              <p class="blink5" v-if="Status.type='alert' ">{{Status.text}}</p>
+              <p v-else>{{Status.text}}</p>
+            </div>
           </div>
         </div>
-
-        <div class="rounded shadow my-4 timer">
+        <div class="rounded shadow my-4 timer" v-if="currentTime">
           <h2>{{currentTime}} секунд</h2>
         </div>
+
         <!-- <div class="rounded shadow my-4 status" v-if="Status">
           <h2 v-if="Status.type == 'alert'" class="blink5">{{Status.text}}</h2>
         </div> -->
@@ -98,9 +104,10 @@
           </div>
         </div>
         <div>
-          <button class="btn btn-primary" v-on:click="ClearForm">
+          <button class="btn btn-danger" v-on:click="ClearForm">
             Очистить форму
           </button>
+          <button class="btn btn-success" v-on:click="">Отправить</button>
         </div>
       </div>
     </section>
@@ -114,11 +121,12 @@
         el: "#app",
         data: {
           oTest: null,
-          currentTime: 62,
+          currentTime: null,
           timer: null,
           Status: null,
           tStatus: null,
           toast: null,
+          soundNot: new Audio(),
         },
         methods: {
           Save: function () {
@@ -140,15 +148,16 @@
             localStorage.clear("save");
           },
           StartTimer() {
-            this.timer = setInterval(() => {
-              this.currentTime--;
-            }, 1000);
+            if (this.currentTime != null) {
+              this.timer = setInterval(() => {
+                this.currentTime--;
+              }, 1000);
+            }
           },
           StopTimer() {
             clearTimeout(this.timer);
           },
           clearStatus() {
-            console.log("Clear status");
             this.Status = null;
           },
           SetStatus(text, type, timeout) {
@@ -182,12 +191,14 @@
                 answer: [],
               },
             ];
-            this.testTime = 50000;
+            this.currentTime = 65;
             console.log("No save");
           }
         },
         mounted() {
-          this.StartTimer();
+          if (this.currentTime != null) {
+            this.StartTimer();
+          }
         },
         destroyed() {
           this.StopTimer();
@@ -196,12 +207,18 @@
           currentTime(time) {
             if (time === 0) {
               this.StopTimer();
+              this.SetStatus("Время вышло", "", 5000);
             } else if (time == 60) {
               this.SetStatus("Осталась 1 минута", "alert", 5000);
             }
           },
           Status: function (val) {
+            function playAudio() {
+             
+            }
             if (val != null) {
+              this.soundNot.src = "assets/sounds/toast.mp3";
+              this.soundNot.play();
               $("#toast").toast("show");
             }
           },
