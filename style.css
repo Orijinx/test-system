@@ -1,0 +1,22 @@
+.timer{
+    text-align: center;
+    width: fit-content;
+}
+.status{
+    width: fit-content;
+}
+
+.blink5 {
+    -webkit-animation: blink5 2s linear infinite;
+    animation: blink5 2s linear infinite;
+  }
+  @-webkit-keyframes blink5 {
+    0% { color: rgb(255, 0, 0); }
+    50% { color: rgb(145, 1, 1); }
+    100% { color: rgb(255, 0, 0); }
+  }
+  @keyframes blink5 {
+    0% { color: rgb(255, 0, 0); }
+    50% { color: rgb(145, 1, 1); }
+    100% { color: rgb(255, 0, 0); }
+  }
