@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ДЕМОНСТРАЦИЯ</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <section>
+      <div class="container-fluid" id="app">
+        <!-- Position it -->
+        <div
+          class="w-25"
+          style="position: absolute; top: 0; right: 0; z-index: 5"
+        >
+          <!-- Then put toasts within -->
+          <div
+            class="toast"
+            role="alert"
+            id="toast"
+            aria-live="assertive"
+            aria-atomic="true"
+            data-delay="4000"
+          >
+            <div class="toast-header">
+              <strong class="mr-auto">Внимание!</strong>
+              <!-- <small class="text-muted">just now</small> -->
+              <button
+                type="button"
+                class="ml-2 mb-1 close"
+                data-dismiss="toast"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="toast-body" v-if="Status" style="font-size: large;">
+              <p class="blink5" v-if="Status.type='alert' ">{{Status.text}}</p>
+              <p v-else>{{Status.text}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="rounded shadow my-4 timer" v-if="currentTime">
+          <h2>{{currentTime}} секунд</h2>
+        </div>
+
+        <!-- <div class="rounded shadow my-4 status" v-if="Status">
+          <h2 v-if="Status.type == 'alert'" class="blink5">{{Status.text}}</h2>
+        </div> -->
+        <div v-for="t in oTest" class="my-4" v-on:change="Save()">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">{{t.question}}</h5>
+              <!-- <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6> -->
+              <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
+              <div v-if="t.radio">
+                <div class="form-check" v-for="r in t.radio">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="flexRadioDefault"
+                    id="flexRadioDefault1"
+                    v-bind:value="r"
+                    v-model="t.answer"
+                  />
+                  <label class="form-check-label" for="flexRadioDefault1">
+                    {{r}}
+                  </label>
+                </div>
+              </div>
+              <div v-else-if="t.chekeds">
+                <div v-for="c in t.chekeds">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      v-bind:id="c"
+                      v-bind:value="c"
+                      v-model="t.answer"
+                    />
+                    <label class="form-check-label" v-bind:for="c">
+                      {{c}}
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div v-else>
+                <input
+                  type="text"
+                  class="form-control"
+                  aria-label="Sizing example input"
+                  aria-describedby="inputGroup-sizing-sm"
+                  v-model="t.answer"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="oTest">
+          <button class="btn btn-danger" v-on:click="ClearForm">
+            Очистить форму
+          </button>
+          <button class="btn btn-success" v-on:click="">Отправить</button>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="js/app.js">
+     
+    </script>
+  </body>
+</html>
