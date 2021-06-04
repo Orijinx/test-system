@@ -1,0 +1,19 @@
+[
+  {
+    "id": 1,
+    "question": "Сколько лет создателю?",
+    "answer": null
+  },
+  {
+    "id": 4,
+    "question": "Его любимый язык программирования?",
+    "radio": ["php", "js", "golang"],
+    "answer": null
+  },
+  {
+    "id": 5,
+    "question": "Где он работал/работает?",
+    "chekeds": ["АО НПФ СИГМА", "ORIJINX"],
+    "answer": []
+  }
+]
