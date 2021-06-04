@@ -13,8 +13,16 @@
   </head>
 
   <body>
-    <section>
+    <section class=" h-100">
       <div class="container-fluid" id="app">
+        <!-- PRELOADER -->
+        <div class="preloader" v-if="isLoading">
+          <div class="preloader__row">
+            <div class="preloader__item"></div>
+            <div class="preloader__item"></div>
+          </div>
+        </div>
+        <!--  -->
         <!-- Position it -->
         <div
           class="w-25"
@@ -41,7 +49,7 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="toast-body" v-if="Status" style="font-size: large;">
+            <div class="toast-body" v-if="Status" style="font-size: large">
               <p class="blink5" v-if="Status.type='alert' ">{{Status.text}}</p>
               <p v-else>{{Status.text}}</p>
             </div>
@@ -112,12 +120,17 @@
       </div>
     </section>
 
+
+    <!-- <footer class="footer fixed-bottom wh-100">
+      <div class="container">
+        <h3>ORIJINX</h3>
+      </div>
+    </footer> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-    <script src="js/app.js">
-     
-    </script>
+    <script src="js/util.js"></script>
+    <script src="js/app.js"></script>
   </body>
 </html>
