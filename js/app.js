@@ -8,6 +8,7 @@ let app = new Vue({
     tStatus: null,
     toast: null,
     soundNot: new Audio(),
+    loading: null,
   },
   methods: {
     Save: function () {
@@ -17,10 +18,27 @@ let app = new Vue({
       var localData = JSON.parse(localStorage.getItem("save"));
       if (localData != null) {
         this.oTest = localData;
+        this.isLoading = false;
         return true;
       } else {
         return false;
       }
+    },
+    LoadingTest: async function (url) {
+      let response = await fetch(url);
+      if (response.ok) {
+        // если HTTP-статус в диапазоне 200-299
+        // получаем тело ответа (см. про этот метод ниже)
+        let json = await response.json();
+        this.oTest = json;
+        this.StopLoading();
+        PrintLog("Load done", "su");
+      } else {
+        PrintLog("Ошибка HTTP: " + response.status, "er");
+      }
+    },
+    StopLoading() {
+      clearInterval(this.loading);
     },
     ClearForm: function () {
       this.oTest.forEach((item) => {
@@ -38,6 +56,7 @@ let app = new Vue({
     StopTimer() {
       clearTimeout(this.timer);
     },
+
     clearStatus() {
       this.Status = null;
     },
@@ -53,26 +72,9 @@ let app = new Vue({
     if (this.loadSave()) {
       console.log("Save is load");
     } else {
-      //   this.oTest = [
-      //     {
-      //       id: 1,
-      //       question: "Сколько лет создателю?",
-      //       answer: null,
-      //     },
-      //     {
-      //       id: 4,
-      //       question: "Его любимый язык программирования?",
-      //       radio: ["php", "js", "golang"],
-      //       answer: null,
-      //     },
-      //     {
-      //       id: 5,
-      //       question: "Где он работал/работает?",
-      //       chekeds: ["АО НПФ СИГМА", "ORIJINX"],
-      //       answer: [],
-      //     },
-      //   ];
-      //   this.currentTime = 65;
+      this.loading = setInterval(() => {
+        this.LoadingTest("js/test.json");
+      }, 3000);
       console.log("No save");
     }
   },
@@ -101,5 +103,13 @@ let app = new Vue({
       }
     },
   },
-  computed: {},
+  computed: {
+    isLoading: function () {
+      if (this.oTest != null) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+  },
 });
