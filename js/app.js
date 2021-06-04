@@ -75,7 +75,6 @@ let app = new Vue({
       this.loading = setInterval(() => {
         this.LoadingTest("js/test.json");
       }, 3000);
-      console.log("No save");
     }
   },
   mounted() {
